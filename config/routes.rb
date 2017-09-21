@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   resources :users
 
+  # match 'delivery', to: 'webhook_event_requests#delivery', via: [:get, :post]
+  # match 'delivery', to: 'webhook_event_requests#bounce',   via: [:get, :post]
+  # match 'delivery', to: 'webhook_event_requests#opens',    via: [:get, :post]
+
   resources :webhook_event_requests do
     post 'delivery', on: :collection
     post 'bounce', on: :collection
