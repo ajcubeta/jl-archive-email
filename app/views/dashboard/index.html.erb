@@ -1,11 +1,9 @@
 <h1>Welcome to <u>JL Archive Email</u> test app</h1>
 <h2>We would like to do a test and archive our Postmark Messages</h2>
 <p>
-  Today is: <b><%= Date.today.strftime("%d %B %Y") %></b>
+  Today is: <b><%= Date.today.strftime("%d %B %Y") %></b>, you want to <%= link_to 'Sign out', logout_path %>?
 </p>
 
-<%= link_to 'Sign out', logout_path %>
-
-<!-- <p>
-  The time is now: <b><%= DateTime.now.strftime("%l:%M %p") %></b>
-</p> -->
+<h2>
+  <%= link_to 'Webhooks', webhook_event_requests_path %>
+</h2>
