@@ -1,0 +1,2 @@
+class WebhookEventRequest < ApplicationRecord
+end

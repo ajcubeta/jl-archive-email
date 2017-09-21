@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-  # https://github.com/plataformatec/devise/blob/master/README.md
   devise_for :users, :path_names => { :sign_in => 'login', :sign_out => 'logout' }
   devise_scope :user do
     get '/login', to: 'devise/sessions#new'
@@ -11,6 +9,12 @@ Rails.application.routes.draw do
   get 'dashboard' => 'dashboard#index', :as => 'dashboard'
 
   resources :users
-  
+
+  resources :webhook_event_requests do
+    post 'delivery', on: :collection
+    post 'bounce', on: :collection
+    post 'opens', on: :collection
+  end
+
   root to: "home#index"
 end
