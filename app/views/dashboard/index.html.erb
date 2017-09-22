@@ -1,9 +1,13 @@
 <h1>Welcome to <u>Jobline Archive Email</u> test app</h1>
 <h2>We would like to do a test and archive our Postmark Messages</h2>
 <p>
-  Today is: <b><%= Date.today.strftime("%d %B %Y") %></b>, you want to <%= link_to 'Sign out', logout_path %>?
+  Today is: <b><%= Date.today.strftime("%d %b %Y") %></b>, you want to <%= link_to 'Sign out', logout_path %>?
 </p>
 
-<h2>
-  <%= link_to 'Webhooks', webhook_event_requests_path %>
-</h2>
+<ul>
+  <li><%= link_to 'List of Webhook Event Requests', webhook_event_requests_path %></li>
+  <li><%= link_to 'Delivery webhook', webhook_event_requests_path %></li>
+  <li><%= link_to 'Bounce webhook', webhook_event_requests_path %></li>
+  <li><%= link_to 'Opens webhook', webhook_event_requests_path %></li>
+  <li><%= link_to 'Email Messages', webhook_event_requests_path %></li>
+</ul>
