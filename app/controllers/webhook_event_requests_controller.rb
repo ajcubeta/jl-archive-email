@@ -5,7 +5,7 @@ class WebhookEventRequestsController < ApplicationController
 
   def delivery
     request.body.rewind
-    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, type: 'delivery')
+    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, webhook_type: 'delivery')
     @title = "Webhook Delivery"
 
     if @webhook_event_request.save
@@ -17,7 +17,7 @@ class WebhookEventRequestsController < ApplicationController
 
   def bounce
     request.body.rewind
-    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, type: 'bounce')
+    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, webhook_type: 'bounce')
     @title = "Webhook Bounce"
 
     if @webhook_event_request.save
@@ -29,7 +29,7 @@ class WebhookEventRequestsController < ApplicationController
 
   def opens
     request.body.rewind
-    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, type: 'opens')
+    @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, webhook_type: 'opens')
     @title = "Webhook Opens"
 
     if @webhook_event_request.save
