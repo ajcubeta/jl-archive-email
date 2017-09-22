@@ -14,7 +14,7 @@
     <% @webhook_event_requests.each do |webhook_event_request| %>
       <tr>
         <td><%= webhook_event_request.payload %></td>
-        <td><%= webhook_event_request.type %></td>
+        <td><%= webhook_event_request.webhook_type %></td>
         <td><%= link_to 'Show', webhook_event_request %></td>
         <td><%= link_to 'Destroy', webhook_event_request, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
