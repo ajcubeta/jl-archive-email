@@ -36,6 +36,11 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   # Sept 2017
   => @from_date = Date.beginning_of_month.strftime("%Y-%m-%d")
   => @to_date = Date.end_of_month.strftime("%Y-%m-%d")
+
+  # Today
+  => @yesterday = Date.today - 1
+  => @from_date = @yesterday.strftime("%Y-%m-%d")
+  => @to_date = Date.today.strftime("%Y-%m-%d")
 ```
 
 * Get Outbound messages search
