@@ -41,6 +41,8 @@ group :development, :test do
   gem 'minitest-reporters'
   gem 'byebug'
 end
-gem 'rails_12factor', group: :production
 
+# For Heroku required for twelve-factor platforms apps
+gem 'rails_12factor', group: :production
+# Declared ruby version explicitly
 ruby "2.4.1"

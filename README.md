@@ -77,7 +77,7 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
     * TrackOpens
     * TrackLinks
 
-* Save it to CSV ...
+* Save it to PostgreSQL DB then generate it to CSV ...
   * TotalCount
     ```
     puts data["TotalCount"]

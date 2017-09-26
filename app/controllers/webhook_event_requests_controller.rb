@@ -3,6 +3,25 @@ class WebhookEventRequestsController < ApplicationController
   before_action :set_webhook_event_request, only: [:show, :destroy]
   protect_from_forgery except: [:delivery, :bounce, :opens]
 
+  # Pagination will be implemented next
+  def index
+    @title = "Webhook Event Requests"
+    @webhook_event_requests = WebhookEventRequest.all
+  end
+
+  def show
+    @title = "Webhook Event Requests Show"
+    # We have an ID alerady from before_action => @webhook_event_request
+  end
+
+  def destroy
+    @webhook_event_request.destroy
+    respond_to do |format|
+      format.html { redirect_to webhook_event_requests_url }
+      format.json { head :no_content }
+    end
+  end
+
   def delivery
     request.body.rewind
     @webhook_event_request = WebhookEventRequest.new(payload: request.body.read, webhook_type: 'delivery')
@@ -36,25 +55,6 @@ class WebhookEventRequestsController < ApplicationController
       render json: @webhook_event_request, status: :created
     else
       render json: @webhook_event_request.errors, status: :unprocessable_entity
-    end
-  end
-
-  # Pagination will be implemented next
-  def index
-    @title = "Webhook Event Requests"
-    @webhook_event_requests = WebhookEventRequest.all
-  end
-
-  def show
-    @title = "Webhook Event Requests Show"
-    # We have an ID alerady from before_action => @webhook_event_request
-  end
-
-  def destroy
-    @webhook_event_request.destroy
-    respond_to do |format|
-      format.html { redirect_to webhook_event_requests_url }
-      format.json { head :no_content }
     end
   end
 
