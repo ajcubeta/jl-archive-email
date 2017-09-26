@@ -20,6 +20,7 @@ gem 'oink'
 gem 'bson_ext'
 gem 'postmark-rails'
 gem 'rest-client'
+gem 'jbuilder'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
