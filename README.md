@@ -37,7 +37,7 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   => @from_date = Date.beginning_of_month.strftime("%Y-%m-%d")
   => @to_date = Date.end_of_month.strftime("%Y-%m-%d")
 
-  # Today
+  # Up until Today from Yesterday (24 hrs)
   => @yesterday = Date.today - 1
   => @from_date = @yesterday.strftime("%Y-%m-%d")
   => @to_date = Date.today.strftime("%Y-%m-%d")
@@ -51,14 +51,20 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
     * count
     * offset
 
-  <!-- Outbound -->
+  <!-- Outbound 1 -->
   ```
-  messages = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=0&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+  messages1 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=0&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+  ```
+
+  <!-- Outbound 2 -->
+  ```
+  messages2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
   ```
 
 * Parse json data
   ```
-  data = JSON.parse(messages)
+  data1 = JSON.parse(messages1)
+  data2 = JSON.parse(messages2)
   ```
 * We have `data` string values which we will map the
   * TotalCount
@@ -85,7 +91,13 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * Messages
     ```
       count = 0
-      data["Messages"].each do |d|
+      data1["Messages"].each do |d|
+        count += 1
+        puts "#{count}) #{d["Tag"]} #{d["MessageID"]} #{d["To"]} #{d["Cc"]} #{d["Bcc"]} #{d["Recipients"]} #{d["ReceivedAt"]} #{d["ReceivedAt"]} #{d["From"]} #{d["Subject"]} #{d["Attachments"]} #{d["Status"]} #{d["TrackOpens"]} #{d["TrackLinks"]}"
+      end
+
+      count = 0
+      data2["Messages"].each do |d|
         count += 1
         puts "#{count}) #{d["Tag"]} #{d["MessageID"]} #{d["To"]} #{d["Cc"]} #{d["Bcc"]} #{d["Recipients"]} #{d["ReceivedAt"]} #{d["ReceivedAt"]} #{d["From"]} #{d["Subject"]} #{d["Attachments"]} #{d["Status"]} #{d["TrackOpens"]} #{d["TrackLinks"]}"
       end
