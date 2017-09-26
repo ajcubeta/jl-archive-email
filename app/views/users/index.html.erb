@@ -1,6 +1,18 @@
-I want to <%= link_to '["Sign out"]', logout_path %> ?
+You want to <%= link_to '["Sign out"]', logout_path %> ?
 <br />
-<span><%= link_to '<< Back to ["Dashboard"]', '/dashboard' %></span>
+
+<ul class="list">
+  <li><%= link_to '{Dashboard}', dashboard_path %></li>
+  <li><%= link_to '{Outbound Messages}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Users}', users_path %></li>
+</ul>
+
+<ul class="list">
+  <li><%= link_to '{Outbound Webhooks}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Delivery webhook}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Bounce webhook}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Opens webhook}', webhook_event_requests_path %></li>
+</ul>
 
 <h1>Users</h1>
 

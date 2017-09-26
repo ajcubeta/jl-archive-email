@@ -1,14 +1,14 @@
-<h1>Welcome to <u>Jobline Archive Email</u> test app</h1>
-<h2>We would like to do a test and archive our Postmark Messages</h2>
+<h1>Jobline Archive Emails</h1>
+<h2>We will do a test demo and archive our Email Messages from Postmark</h2>
 <p>
   Today is <b><%= Date.today.strftime("%d %b %Y") %></b>, you want to <%= link_to 'Sign out', logout_path %>?
 </p>
 
 <ul>
-  <li><%= link_to 'Webhook Event Requests', webhook_event_requests_path %></li>
-  <li><%= link_to 'Delivery webhook', webhook_event_requests_path %></li>
-  <li><%= link_to 'Bounce webhook', webhook_event_requests_path %></li>
-  <li><%= link_to 'Opens webhook', webhook_event_requests_path %></li>
-  <li><%= link_to 'Email Messages', webhook_event_requests_path %></li>
-  <li><%= link_to 'Users', users_path %></li>
+  <li><%= link_to '{Outbound Webhooks}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Delivery webhook}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Bounce webhook}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Opens webhook}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Outbound Messages}', webhook_event_requests_path %></li>
+  <li><%= link_to '{Users}', users_path %></li>
 </ul>
