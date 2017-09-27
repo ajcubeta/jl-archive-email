@@ -25,6 +25,17 @@ So we would like to have a copy of our own for data recording purpose and have i
 
 Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messages.html) that let us get all the details about any outbound or inbound message that we've sent or received through a specific server.
 
+# Set-up Config Variables at Heroku settings
+  We will configure our system variables to use on "#{ENV[" "]}"
+
+  * POSTMARK_API_KEY
+  * JL_INFO
+  * JL_UNAME
+  * JL_PWORD
+  * JL_ERROR_CATCH_UNAME
+  * JL_ERROR_CATCH_PWORD
+  * TECH3_JOBLINE
+
 # Query Method
 
 * Go to rails console
@@ -41,11 +52,10 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
 * Go to rails console, we specify the date 45 days ago. To test query.
 ```
   # 45 days ago
-  => @days_ago = Date.today - 41
+  => @days_ago = Date.today - 45
   => @from_date = @days_ago.strftime("%Y-%m-%d")
   => @to_date = @days_ago.strftime("%Y-%m-%d")
 ```
-
 
 * Get Outbound messages search
   * Required headers
@@ -70,13 +80,13 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   messages3 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1000&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
   ```
 
-
 * Parse json data
   ```
   data1 = JSON.parse(messages1)
   data2 = JSON.parse(messages2)
   data3 = JSON.parse(messages3)
   ```
+
 * We have `data` string values which we will map the
   * TotalCount
   * Messages
@@ -121,19 +131,22 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
       end
     ```
 
-    # Sample results
-    tag : leave #Text
-    MessageID: bce7fa33-e10b-49e2-91df-1684d261184a #Text
-    To: [{"Email"=>"msd5@jobline.com.sg", "Name"=>""}] #Text #Array{True}
-    Cc: [] #Text #Array{True}
-    Bcc: [] #Text #Array{True}
-    Recipients: ["msd5@jobline.com.sg"] #Text #Array{True}
-    ReceivedAt: 2017-09-01T00:00:49.9906758-04:00
-    From: "Jobline" <info@jobline.com.sg> #Text
-    Subject: Jerez Mark Ryan Oblepias uploaded a leave #Text
-    Attachments: [] #Text #Array{True}
-    Status: Sent #Text
-    TrackOpens: true #Text
-    TrackLinks: None #Text
+# Sample results
+  * tag : leave
+  * MessageID: bce7fa33-e10b-49e2-91df-1684d261184a
+  * To: [{"Email"=>"msd5@jobline.com.sg", "Name"=>""}]
+  * Cc: []
+  * Bcc: []
+  * Recipients: ["msd5@jobline.com.sg"]
+  * ReceivedAt: 2017-09-01T00:00:49.9906758-04:00
+  * From: "Jobline" <info@jobline.com.sg>
+  * Subject: Jerez Mark Ryan Oblepias uploaded a leave
+  * Attachments: []
+  * Status: Sent
+  * TrackOpens: true
+  * TrackLinks: None
+
+# Try to run this rake (45 days ago), for 1 day.
+rake postmark_webhook:import_past_outbound_messages --trace
 
 On going! ...

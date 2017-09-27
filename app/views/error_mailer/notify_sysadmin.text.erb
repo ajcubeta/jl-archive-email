@@ -1,0 +1,7 @@
+<%= raw @msg %>
+
+<% if @backtrace.respond_to?(:each) %>
+  <%- @backtrace.each do |line| %>
+    <%= line %>
+  <% end %>
+<% end %>
