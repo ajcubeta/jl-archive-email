@@ -26,12 +26,20 @@ You want to <%= link_to '["Sign out"]', logout_path %> ?
   </thead>
 
   <tbody>
-    <% @bounce_outbound_messages.each do |bounce_outbound_message| %>
+    <% if @bounce_outbound_messages.blank? %>
       <tr>
-        <td><%= open_outbound_message.payload %></td>
-        <td><%= link_to 'Show', bounce_outbound_message %></td>
-        <td><%= link_to 'Destroy', bounce_outbound_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>-</td>
+        <<td>-</td>
+        <td>-</td>
       </tr>
+    <% else %>
+      <% @bounce_outbound_messages.each do |bounce_outbound_message| %>
+        <tr>
+          <td><%= open_outbound_message.payload %></td>
+          <td><%= link_to 'Show', bounce_outbound_message %></td>
+          <td><%= link_to 'Destroy', bounce_outbound_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
