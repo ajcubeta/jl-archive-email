@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170922013707) do
+ActiveRecord::Schema.define(version: 20170927043837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "outbound_messages", force: :cascade do |t|
+    t.string "tag"
+    t.text "message_id"
+    t.text "to", default: [], array: true
+    t.text "cc", default: [], array: true
+    t.text "bcc", default: [], array: true
+    t.text "recipients", default: [], array: true
+    t.datetime "received_at"
+    t.text "from"
+    t.text "subject"
+    t.text "attachments", default: [], array: true
+    t.string "status"
+    t.boolean "track_opens"
+    t.text "track_links"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

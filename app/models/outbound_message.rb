@@ -1,0 +1,2 @@
+class OutboundMessage < ApplicationRecord
+end

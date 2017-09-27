@@ -147,6 +147,6 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * TrackLinks: None
 
 # Try to run this rake (45 days ago), for 1 day.
-rake postmark_webhook:import_past_outbound_messages --trace
+rails postmark_webhook:import_past_outbound_messages --trace
 
 On going! ...

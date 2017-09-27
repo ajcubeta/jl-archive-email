@@ -1,0 +1,2 @@
+class OutboundMessagesController < ApplicationController
+end
