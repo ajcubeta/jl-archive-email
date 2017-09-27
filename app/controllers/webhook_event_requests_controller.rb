@@ -59,15 +59,15 @@ class WebhookEventRequestsController < ApplicationController
   end
 
   def delivery_outbound_messages
-    @webhook_event_request = WebhookEventRequest.where(webhook_type: 'delivery').all
+    @delivery_outbound_messages = WebhookEventRequest.where(webhook_type: 'delivery').all
   end
 
   def bounce_outbound_messages
-    @webhook_event_request = WebhookEventRequest.where(webhook_type: 'bounce').all
+    @bounce_outbound_messages = WebhookEventRequest.where(webhook_type: 'bounce').all
   end
 
   def open_outbound_messages
-    @webhook_event_request = WebhookEventRequest.where(webhook_type: 'opens').all
+    @open_outbound_messages = WebhookEventRequest.where(webhook_type: 'opens').all
   end
 
   private

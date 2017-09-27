@@ -1,0 +1,43 @@
+<tr>
+  <td>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:550px;">
+      <tr>
+        <td valign="top" style="padding:20px;padding-top:13px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td align="center" valign="top" style="border-bottom:1px solid #E5E5E5;padding-bottom:15px;">
+                <span style="color:#427DDD;font-size:20px;font-weight:normal;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                  <%= @msg %>
+                </span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+  </td>
+</tr>
+<tr>
+  <td>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:550px;">
+      <tr>
+        <td valign="top">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td style="padding:20px;padding-top:0px;padding-bottom:40px;">
+                <pre style="border:1px solid #F2F2F2;padding:10px;color:#FC6258;font-size:11px;border-radius:3px;width:510px;overflow:scroll;">
+                  <% if @backtrace.respond_to?(:each) %>
+                    <%- @backtrace.each do |line| %>
+                      <%= line[(line.index('/lib/') || 0), line.size] %>
+                    <% end %>
+                  <% end %>
+                </pre>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>

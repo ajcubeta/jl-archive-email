@@ -14,19 +14,23 @@ You want to <%= link_to '["Sign out"]', logout_path %> ?
   <li><%= link_to '{Opens webhook}', webhook_opens_path %></li>
 </ul>
 
-<h1>Users</h1>
+<h1>Outbound Messages - Opens</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Email</th>
+      <th>Payload</th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
+    <% @open_outbound_messages.each do |open_outbound_message| %>
       <tr>
-        <td><%= user.email %></td>
+        <td><%= open_outbound_message.payload %></td>
+        <td><%= link_to 'Show', open_outbound_message %></td>
+        <td><%= link_to 'Destroy', open_outbound_message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
