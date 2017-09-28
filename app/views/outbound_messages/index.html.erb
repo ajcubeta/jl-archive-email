@@ -14,19 +14,23 @@ You want to <%= link_to '["Sign out"]', logout_path %> ?
   <li><%= link_to '{Opens webhook}', webhook_opens_path %></li>
 </ul>
 
-<h1>Users</h1>
+<h1>Outbound Messages</h1>
 
 <table>
   <thead>
     <tr>
-      <th>Email</th>
+      <th>Tag</th>
+      <th>MessageID</th>
+      <th>ReceivedAt</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @users.each do |user| %>
+    <% @messages.each do |msg| %>
       <tr>
-        <td><%= user.email %></td>
+        <td><%= msg.tag %></td>
+        <td><%= msg.message_id %></td>
+        <td><%= msg.received_at.strftime("%m %B %y - %l:%M %p") %></td>
       </tr>
     <% end %>
   </tbody>
