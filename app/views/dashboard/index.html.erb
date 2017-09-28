@@ -5,10 +5,14 @@
 </p>
 
 <ul>
-  <li><%= link_to '{Outbound Webhooks}', webhook_event_requests_path %></li>
-  <li><%= link_to '{Delivery webhook}', webhook_delivery_path %></li>
-  <li><%= link_to '{Bounce webhook}', webhook_bounce_path %></li>
-  <li><%= link_to '{Opens webhook}', webhook_opens_path %></li>
-  <li><%= link_to '{Outbound Messages}', webhook_event_requests_path %></li>
-  <li><%= link_to '{Users}', users_path %></li>
+  <li><%= link_to 'Go to User list', users_path %></li>
+  <li><%= link_to 'View Outbound Messages', outbound_messages_path %></li>
+</ul>
+
+<h4>Postmark Outbouned Webhooks</h4>
+<ul>
+  <li><%= link_to 'Outbound Webhooks', webhook_event_requests_path %></li>
+  <li><%= link_to 'Delivery webhook', webhook_delivery_path %></li>
+  <li><%= link_to 'Bounce webhook', webhook_bounce_path %></li>
+  <li><%= link_to 'Opens webhook', webhook_opens_path %></li>
 </ul>
