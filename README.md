@@ -146,7 +146,7 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * TrackOpens: true
   * TrackLinks: None
 
-# Delivery Data Structure
+# Delivery Data Structure (with Sample record)
   * ServerID : leave
   * MessageID: bce7fa33-e10b-49e2-91df-1684d261184a
   * Recipient: "sample@gmail.com"
@@ -154,7 +154,7 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * DeliveredAt: "2017-09-21T22:20:34-04:00"
   * Details: "smtp;250 2.0.0 OK 1506046834 w132si2751315itf.90 - gsmtp"
 
-# Bounce Data Structure
+# Bounce Data Structure (with Sample record)
   * ID: 42
   * Type: "HardBounce"
   * TypeCode: 1,
@@ -172,7 +172,7 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * CanActivate: true,
   * Subject: "Test subject"
 
-# FirstOpen Data Structure
+# FirstOpen Data Structure (with Sample record)
   * FirstOpen: true,
   * Client: {
       * Name: "Apple Mail"
@@ -193,7 +193,8 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * Tag: "account",
   * Recipient: ""
 
-# Try to run this rake (it's 45 days ago), for 1 whole day record.
-rails postmark_webhook:import_past_outbound_messages --trace
+# Run this rake to import Messages to yout DB
+- (The records are past 45 days ago until present), daily records query multiple times.
+  * rails postmark_webhook:import_past_outbound_messages --trace
 
 On going! ...

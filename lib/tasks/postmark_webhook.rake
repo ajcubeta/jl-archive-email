@@ -6,100 +6,74 @@ namespace :postmark_webhook do
       errors = []
       unsaved_messages = []
 
-      # We'll try 45 days ago
-      days_ago = Date.today - 45
-      from_date = days_ago.strftime("%Y-%m-%d")
-      to_date = days_ago.strftime("%Y-%m-%d")
+      45.downto(0) { |i|
+        days_ago = Date.today - i
+        date_request = days_ago.strftime("%Y-%m-%d")
 
-      # Curl to get the 1st 500 records
-      messages1 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=0&todate=#{to_date}&fromdate=#{from_date}" \
-                  -X GET -H "Accept: application/json" \
-                  -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+        # (Postmark API has 500 max record per query request), but can get the "TotalCount".
+        first_set = OutboundMessage.query_postmark_outbound_messages(date_request)
+        total_count = first_set["TotalCount"]
+        puts "------------------------------------------------------"
+        puts "| #{i} days ago dated #{days_ago} messages count is #{total_count} |"
+        puts "------------------------------------------------------"
 
-      # Parse the 1st 500 curl messages
-      data1 = JSON.parse(messages1)
-      puts "Messages is #{data1}"
+        # Less than or equal to 500, (Postmark max record per query request)
+        if total_count <= 500
+          outbound_messages = first_set["Messages"]
+          count = 0
+          outbound_messages.each do |msg|
+            count += 1
+            puts "#{count}): #{msg}"
+            OutboundMessage.import_outbound_message(msg)
+          end
+        elsif (total_count > 500) && (total_count <= 1000) # From 501 to 1K
+          # Get the remaining records below 1k
+          second_set = OutboundMessage.query_postmark_outbound_messages(date_request, 500)
+          # Merge and flatten "Messages" => outbound_messages
+          outbound_messages = (first_set["Messages"] << second_set["Messages"]).flatten!
 
-      # Check the total count number
-      total_count = data1["TotalCount"]
-      puts "Total count is #{total_count}"
+          count = 0
+          outbound_messages.each do |msg|
+            count += 1
+            puts "#{count}): #{msg}"
+            OutboundMessage.import_outbound_message(msg)
+          end
+        elsif (total_count > 1000) && (total_count <= 1500)
+          # Get the remaining records below 1k
+          second_set = OutboundMessage.query_postmark_outbound_messages(date_request, 500)
+          # Get the remaining records above 1001 and below 1.5k
+          third_set = OutboundMessage.query_postmark_outbound_messages(date_request, 100)
+          # Merge and flatten "Messages" => outbound_messages
+          outbound_messages = (first_set["Messages"] << second_set["Messages"] << third_set["Messages"]).flatten!
 
-      if total_count <= 500
-        count = 0
-        data1["Messages"].each do |msg|
-          count += 1
-          puts "#{count}): #{msg}"
-          OutboundMessage.import_outbound_message(msg)
+          count = 0
+          outbound_messages.each do |msg|
+            count += 1
+            puts "#{count}): #{msg}"
+            OutboundMessage.import_outbound_message(msg)
+          end
+        elsif (total_count > 1500) && (total_count <= 2000)
+          # This time we will merge all records below 2K
+          # Get the 2nd set remaining records below 1k, since we have already 1st set from top (initially)
+          second_set = OutboundMessage.query_postmark_outbound_messages(date_request, 500)
+          # Get the remaining records above 1001 and below 1.5k
+          third_set = OutboundMessage.query_postmark_outbound_messages(date_request, 1000)
+          # Get the remaining records above 1001 and below 1.5k
+          fourth_set = OutboundMessage.query_postmark_outbound_messages(date_request, 1500)
+
+          # Merge and flatten "Messages" => outbound_messages
+          outbound_messages = (first_set["Messages"] << second_set["Messages"] << third_set["Messages"] << fourth_set["Messages"]).flatten!
+
+          count = 0
+          outbound_messages.each do |msg|
+            count += 1
+            puts "#{count}): #{msg}"
+            OutboundMessage.import_outbound_message(msg)
+          end
+        else
+          'No actions taken'
         end
-
-      elsif (total_count > 500) && (total_count <= 1000)
-
-        messages2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        data2 = JSON.parse(messages2)
-        combined_messages = (data1["Messages"] << data2["Messages"]).flatten!
-
-        count = 0
-        combined_messages.each do |msg|
-          count += 1
-          puts "#{count}): #{msg}"
-          OutboundMessage.import_outbound_message(msg)
-        end
-
-      elsif (total_count > 1000) && (total_count <= 1500)
-
-        messages2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        messages3 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1000&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        data2 = JSON.parse(messages2)
-        data3 = JSON.parse(messages3)
-
-        combined_messages = (data1["Messages"] << data2["Messages"] << data3["Messages"]).flatten!
-
-        count = 0
-        combined_messages.each do |msg|
-          count += 1
-          puts "#{count}): #{msg}"
-          OutboundMessage.import_outbound_message(msg)
-        end
-
-      elsif (total_count > 1500) && (total_count <= 2000)
-
-        messages2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        messages3 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1000&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        messages4 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1500&todate=#{to_date}&fromdate=#{from_date}" \
-                     -X GET -H "Accept: application/json" \
-                     -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
-
-        data2 = JSON.parse(messages2)
-        data3 = JSON.parse(messages3)
-        data4 = JSON.parse(messages4)
-
-        combined_messages = (data1["Messages"] << data2["Messages"] << data3["Messages"] << data4["Messages"]).flatten!
-
-        count = 0
-        combined_messages.each do |msg|
-          count += 1
-          puts "#{count}): #{msg}"
-          OutboundMessage.import_outbound_message(msg)
-        end
-
-      else
-        'No actions taken'
-      end
+      }
     rescue Exception => e
       puts e.message
       puts e.backtrace.inspect
