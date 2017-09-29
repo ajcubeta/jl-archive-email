@@ -38,7 +38,26 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
 
 # Query Method
 
-* Go to rails console
+* Go to rails console, we loop the date 45 days ago to query email messages or just today query.
+```
+  # 45 days ago
+  45.downto(0) { |i|
+    days_ago = Date.today - i
+    date_request = days_ago.strftime("%Y-%m-%d")
+
+    # Postmark API allow us to query up to 500 max record per request,
+    # From the initial query we can get the "TotalCount" to check how many query we need for that day using "TotalCount".
+    messages = OutboundMessage.query_postmark_outbound_messages(date_request)
+    total_count = messages["TotalCount"]
+  }
+
+  # Date request (to & from) equals to data_request to get the messages of the day.
+  date_request = Date.today.strftime("%Y-%m-%d")
+  messages = OutboundMessage.query_postmark_outbound_messages(date_request)
+  total_count = messages["TotalCount"]
+```
+
+* We can query also by month, but not applicable this time due to the offset incremental values
 ```
   # Aug 2017
   => @from_date = Date.today.last_month.beginning_of_month.strftime("%Y-%m-%d")
@@ -47,14 +66,6 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   # Sept 2017
   => @from_date = Date.beginning_of_month.strftime("%Y-%m-%d")
   => @to_date = Date.end_of_month.strftime("%Y-%m-%d")
-```
-
-* Go to rails console, we specify the date 45 days ago. To test query.
-```
-  # 45 days ago
-  => @days_ago = Date.today - 45
-  => @from_date = @days_ago.strftime("%Y-%m-%d")
-  => @to_date = @days_ago.strftime("%Y-%m-%d")
 ```
 
 * Get Outbound messages search
@@ -67,17 +78,17 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
 
   <!-- Outbound 1, we'll query the first 500, so the offset is 0 and count is 500 max -->
   ```
-  messages1 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=0&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+  query_set1 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=0&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
   ```
 
   <!-- Outbound 2, we'll get the offset more that 500, and max count is still 500 -->
   ```
-  messages2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+  query_set2 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=500&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
   ```
 
   <!-- Outbound 3, we'll get the offset more that 1000, and max count is still 500 -->
   ```
-  messages3 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1000&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
+  query_set3 = `curl "https://api.postmarkapp.com/messages/outbound?count=500&offset=1000&todate=#{@to_date}&fromdate=#{@from_date}" -X GET -H "Accept: application/json" -H "X-Postmark-Server-Token: #{ENV["POSTMARK_API_KEY"]}"`
   ```
 
 * Parse json data
@@ -193,8 +204,14 @@ Postmark has [Messages API](http://developer.postmarkapp.com/developer-api-messa
   * Tag: "account",
   * Recipient: ""
 
-# Run this rake to import Messages to yout DB
-- (The records are past 45 days ago until present), daily records query multiple times.
-  * rails postmark_webhook:import_past_outbound_messages --trace
+# Import Messages to your Database using (rails || rake) command.
+  * Postmark retain email messages for the past past 45 days ago until present, query records multiple times within the day
+    ```
+      rails postmark_messages:import_past_outbound_messages --trace
+    ```
+  * Import records of the day. Possibly run rails task at 11:45PM (suggestion), before midnight.
+  ```
+    rails postmark_messages:import_outbound_messages_today --trace
+  ```
 
 On going! ...
