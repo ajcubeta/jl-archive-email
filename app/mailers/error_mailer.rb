@@ -14,12 +14,14 @@ class ErrorMailer < ActionMailer::Base
     enable_starttls_auto: true
   }
 
-  def notify_sysadmin(title, msg, backtrace = nil, emails = "#{ENV["TECH3_JOBLINE"]}")
+  def notify_sysadmin(title, msg, backtrace = nil, errors, emails = "#{ENV["TECH3_JOBLINE"]}")
     @msg       = msg
     @title     = title
     @backtrace = backtrace
+    @errors = errors
+    subject_error = @errors.empty? ? '' : ' (with errors)'
 
-    mail(to: emails, subject: @title) do |format|
+    mail(to: emails, subject: "#{@title} Result #{subject_error}") do |format|
       format.text
     end
   end
