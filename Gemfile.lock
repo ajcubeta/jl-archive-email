@@ -48,12 +48,18 @@ GEM
     ansi (1.5.0)
     arel (8.0.0)
     ast (2.3.0)
+    autoprefixer-rails (7.1.4.1)
+      execjs
     awesome_print (1.8.0)
     bcrypt (3.1.11)
     bcrypt (3.1.11-java)
     bcrypt (3.1.11-x64-mingw32)
     bcrypt (3.1.11-x86-mingw32)
     bindex (0.5.0)
+    bootstrap (4.0.0.beta)
+      autoprefixer-rails (>= 6.0.3)
+      popper_js (~> 1.11.1)
+      sass (>= 3.4.19)
     brakeman (3.7.2)
     bson (1.12.5)
     bson (1.12.5-java)
@@ -164,6 +170,7 @@ GEM
     pg (0.21.0)
     pg (0.21.0-x64-mingw32)
     pg (0.21.0-x86-mingw32)
+    popper_js (1.11.1)
     postmark (1.10.0)
       json
       rake
@@ -340,6 +347,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   awesome_print
   bcrypt (~> 3.1.7)
+  bootstrap (~> 4.0.0.alpha6)
   brakeman
   bson_ext
   bullet

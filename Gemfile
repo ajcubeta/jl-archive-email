@@ -21,6 +21,7 @@ gem 'bson_ext'
 gem 'postmark-rails'
 gem 'rest-client'
 gem 'jbuilder'
+gem 'bootstrap', '~> 4.0.0.alpha6'
 
 group :development do
   gem 'web-console', '>= 3.3.0'
